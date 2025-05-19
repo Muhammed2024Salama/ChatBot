@@ -8,4 +8,5 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //})->middleware('auth:sanctum');
 
-Route::post('/chat', [ChatbotController::class, 'handle']);
+Route::post('/chatbot/message', [ChatbotController::class, 'sendMessage']);
+Route::get('/chatbot/history', [ChatbotController::class, 'history']);
