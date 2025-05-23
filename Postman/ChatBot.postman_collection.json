@@ -1,0 +1,322 @@
+{
+	"info": {
+		"_postman_id": "13285cc7-0fac-4ff5-9ae4-bcf04dcd04a2",
+		"name": "ChatBot",
+		"description": "**Base URL:** `{{BASE_URL}}/api/`\n\n### **Authentication Routes**\n\n#### 1\\. Register User\n\n- **Endpoint:** `POST /auth/register`\n    \n- **Body (JSON):**\n    \n\njsonCopyDownload\n\n```\n{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"secret123\",\n    \"phone_number\": \"+201234567890\"\n}\n\n ```\n\n#### 2\\. Login\n\n- **Endpoint:** `POST /auth/login`\n    \n- **Body (JSON):**\n    \n\njsonCopyDownload\n\n```\n{\n    \"email\": \"john@example.com\",\n    \"password\": \"secret123\"\n}\n\n ```\n\n#### 3\\. Get User Profile\n\n- **Endpoint:** `GET /auth/user`\n    \n- **Headers:**  \n    `Authorization: Bearer {{token}}`\n    \n\n#### 4\\. Logout\n\n- **Endpoint:** `POST /auth/logout`\n    \n- **Headers:**  \n    `Authorization: Bearer {{token}}`\n    \n\n---\n\n### **Chatbot Routes**\n\n#### 1\\. Send Message to AI\n\n- **Endpoint:** `POST /chatbot/message`\n    \n- **Headers:**  \n    `Authorization: Bearer {{token}}`\n    \n- **Body (JSON):**\n    \n\njsonCopyDownload\n\n```\n{\n    \"message\": \"What is Laravel?\"\n}\n\n ```\n\n#### 2\\. Get Chat History\n\n- **Endpoint:** `GET /chatbot/history`\n    \n- **Headers:**  \n    `Authorization: Bearer {{token}}`\n    \n\n---\n\n### **Example Responses**\n\n#### Success Response:\n\njsonCopyDownload\n\n```\n{\n    \"status\": \"success\",\n    \"message\": \"Message sent successfully\",\n    \"data\": {\n        \"message\": \"What is Laravel?\",\n        \"response\": \"Laravel is a PHP web framework...\",\n        \"created_at\": \"2024-03-20 14:30:00\"\n    }\n}\n\n ```\n\n#### Error Response:\n\njsonCopyDownload\n\n```\n{\n    \"status\": \"error\",\n    \"message\": \"Unauthenticated\"\n}\n\n ```\n\n---\n\n### **Environment Variables**\n\njsonCopyDownload\n\n```\n{\n  \"BASE_URL\": \"your_api_url\",\n  \"OPENAI_API_KEY\": \"your_openai_key\"\n}\n\n ```\n\n---",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43162929"
+	},
+	"item": [
+		{
+			"name": "Authentications",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Muhammed Salama\",\n    \"email\": \"devmuhammedsalama@gmail.com\",\n    \"password\": \"password\",\n    \"phone_number\": \"01111570436\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}register",
+							"host": [
+								"{{base_url}}register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"devmuhammedsalama@gmail.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}login",
+							"host": [
+								"{{base_url}}login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|leMeggKBrkFQ4TwL0iHOoiZPXnATikSRVSRqynLV5b905cfc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}logout",
+							"host": [
+								"{{base_url}}logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|8hH6kd0TQNetLGpTQPcJRPZWxOSeCSIhOgltCcF17954de74",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}user",
+							"host": [
+								"{{base_url}}user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ChatBot",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is within an acceptable range\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.message).to.exist;",
+							"    pm.expect(responseData.response).to.exist;",
+							"    pm.expect(responseData.created_at).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message and response are non-empty strings\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");",
+							"    pm.expect(responseData.response).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Response should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Created_at is in a valid date format\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.created_at).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "2|EFDiHKmAl53LyGP9VXMjHx5KEC6Dy7JgalqjTgFA03b02dee",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Bearer",
+						"value": "Authorization",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"message\": \"muhammed\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}chatbot/message",
+					"host": [
+						"{{base_url}}chatbot"
+					],
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Chat History",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1|QNJLiyEJWu3Ux55hhD7lGX4HXTA7FTUDN0alccyke3311146",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}chatbot/history",
+					"host": [
+						"{{base_url}}chatbot"
+					],
+					"path": [
+						"history"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://192.168.1.239/Chatbot/api/",
+			"type": "string"
+		}
+	]
+}
