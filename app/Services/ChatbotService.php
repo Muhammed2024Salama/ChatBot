@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\NewChatMessage;
 use App\Interface\ChatbotInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -35,6 +36,7 @@ class ChatbotService
             'message' => $userMessage,
             'response' => $response,
         ]);
+        broadcast(new NewChatMessage($message))->toOthers();
 
         return $message;
     }
