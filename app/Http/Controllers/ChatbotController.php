@@ -2,35 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SendMessageRequest;
+use App\Http\Resources\MessageResource;
 use App\Models\Message;
-use Illuminate\Support\Facades\Auth;
+use App\Services\ChatbotService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use App\Helper\ResponseHelper;
 
 class ChatbotController extends Controller
 {
     /**
-     * @param Request $request
+     * @var ChatbotService
+     */
+    protected $chatbotService;
+
+    /**
+     * @param ChatbotService $chatbotService
+     */
+    public function __construct(ChatbotService $chatbotService)
+    {
+        $this->chatbotService = $chatbotService;
+    }
+
+    /**
+     * @param SendMessageRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendMessage(Request $request)
+    public function sendMessage(SendMessageRequest $request)
     {
-        $request->validate([
-            'message' => 'required|string',
-        ]);
+        try {
+            $message = $this->chatbotService->sendMessage($request->message);
 
-        $botResponse = $this->generateResponse($request->message);
-
-        $message = Message::create([
-            'user_id' => Auth::id(),
-            'message' => $request->message,
-            'response' => $botResponse,
-        ]);
-
-        return response()->json([
-            'message' => $message->message,
-            'response' => $message->response,
-            'created_at' => $message->created_at,
-        ]);
+            return ResponseHelper::success(
+                message: 'Message sent successfully.',
+                data: new MessageResource($message)
+            );
+        } catch (\Exception $e) {
+            return ResponseHelper::error(
+                message: 'Failed to send message: ' . $e->getMessage(),
+                statusCode: 500
+            );
+        }
     }
 
     /**
@@ -38,22 +52,18 @@ class ChatbotController extends Controller
      */
     public function history()
     {
-        $messages = Message::where('user_id', Auth::id())->latest()->get();
-        return response()->json($messages);
-    }
+        try {
+            $messages = $this->chatbotService->history();
 
-    /**
-     * @param $input
-     * @return string
-     */
-    private function generateResponse($input)
-    {
-        $input = strtolower($input);
-        return match (true) {
-            str_contains($input, 'hello') => 'Hi! How can I help you?',
-            str_contains($input, 'price') => 'Our prices vary based on the product.',
-            str_contains($input, 'muhammed') => 'Muhammed is a software developer and laravel developer.',
-            default => 'Sorry, I did not understand that.',
-        };
+            return ResponseHelper::success(
+                message: 'Message history retrieved successfully.',
+                data: MessageResource::collection($messages)
+            );
+        } catch (\Exception $e) {
+            return ResponseHelper::error(
+                message: 'Failed to fetch history: ' . $e->getMessage(),
+                statusCode: 500
+            );
+        }
     }
 }

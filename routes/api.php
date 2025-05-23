@@ -5,15 +5,20 @@ use App\Http\Controllers\ChatbotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::controller(AuthController::class)->group(function () {
+Route::prefix('auth')->controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
+});
 
-    Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::prefix('auth')->controller(AuthController::class)->group(function () {
         Route::get('user', 'userProfile');
-        Route::get('logout', 'userLogout');
+        Route::post('logout', 'userLogout');
+    });
 
-        Route::post('/chatbot/message', [ChatbotController::class, 'sendMessage']);
-        Route::get('/chatbot/history', [ChatbotController::class, 'history']);
+    Route::prefix('chatbot')->controller(ChatbotController::class)->group(function () {
+        Route::post('message', 'sendMessage');
+        Route::get('history', 'history');
     });
 });

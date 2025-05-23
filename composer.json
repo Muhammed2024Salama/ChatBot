@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "google/cloud-dialogflow": "^2.1",
+        "guzzlehttp/guzzle": "^7.9",
         "knuckleswtf/scribe": "^5.2",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
