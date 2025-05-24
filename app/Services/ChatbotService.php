@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
-use App\Events\NewChatMessage;
+use App\Events\MessageSentEvent;
+use App\Helper\ResponseHelper;
+use App\Http\Resources\MessageResource;
 use App\Interface\ChatbotInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -23,30 +25,40 @@ class ChatbotService
     }
 
     /**
-     * @param string $userMessage
-     * @return mixed
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @param array $data
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function sendMessage(string $userMessage)
+    public function sendMessage(array $data)
     {
-        $response = $this->generateAIResponse($userMessage);
+        try {
+            $userId = Auth::id();
+            $response = $this->generateAIResponse($data['message']);
 
-        $message = $this->chatbotRepository->storeMessage([
-            'user_id' => Auth::id(),
-            'message' => $userMessage,
-            'response' => $response,
-        ]);
-        broadcast(new NewChatMessage($message))->toOthers();
+            $message = $this->chatbotRepository->storeMessage([
+                'user_id' => $userId,
+                'message' => $data['message'],
+                'response' => $response,
+            ]);
 
-        return $message;
+            broadcast(new MessageSentEvent($message))->toOthers();
+
+            return ResponseHelper::success('Message sent successfully.', new MessageResource($message));
+        } catch (\Exception $e) {
+            return ResponseHelper::error('Failed to send message: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function history()
+    public function getHistory()
     {
-        return $this->chatbotRepository->getUserMessages(Auth::id());
+        try {
+            $messages = $this->chatbotRepository->getUserMessages(Auth::id());
+            return ResponseHelper::success('Message history retrieved successfully.', MessageResource::collection($messages));
+        } catch (\Exception $e) {
+            return ResponseHelper::error('Failed to fetch history: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -61,10 +73,7 @@ class ChatbotService
         $response = Http::withToken($apiKey)->post('https://api.openai.com/v1/chat/completions', [
             'model' => 'gpt-3.5-turbo',
             'messages' => [
-                [
-                    'role' => 'user',
-                    'content' => $input,
-                ],
+                ['role' => 'user', 'content' => $input],
             ],
         ]);
 

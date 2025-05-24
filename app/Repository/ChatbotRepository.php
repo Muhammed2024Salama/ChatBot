@@ -8,19 +8,19 @@ use App\Models\Message;
 class ChatbotRepository implements ChatbotInterface
 {
     /**
-     * @param $data
+     * @param array $data
      * @return mixed
      */
-    public function storeMessage($data)
+    public function storeMessage(array $data)
     {
         return Message::create($data);
     }
 
     /**
-     * @param $userId
+     * @param int $userId
      * @return mixed
      */
-    public function getUserMessages($userId)
+    public function getUserMessages(int $userId)
     {
         return Message::where('user_id', $userId)->latest()->get();
     }

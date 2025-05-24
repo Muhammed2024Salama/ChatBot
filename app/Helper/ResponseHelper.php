@@ -28,7 +28,6 @@ class ResponseHelper
             [
                 'status' => $status,
                 'message' => $message,
-                'data' => $data,
             ],
             $statusCode
         );
