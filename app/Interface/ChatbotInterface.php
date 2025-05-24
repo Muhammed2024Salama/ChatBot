@@ -5,14 +5,14 @@ namespace App\Interface;
 interface ChatbotInterface
 {
     /**
-     * @param $data
+     * @param array $data
      * @return mixed
      */
-    public function storeMessage($data);
+    public function storeMessage(array $data);
 
     /**
-     * @param $userId
+     * @param int $userId
      * @return mixed
      */
-    public function getUserMessages($userId);
+    public function getUserMessages(int $userId);
 }

@@ -9,6 +9,11 @@ class Message extends Model
     /**
      * @var string[]
      */
+    protected $with = ['user'];
+
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'user_id',
         'message',
